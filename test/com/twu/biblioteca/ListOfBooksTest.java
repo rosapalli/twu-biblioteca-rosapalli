@@ -1,43 +1,75 @@
 package com.twu.biblioteca;
 
 import org.junit.Test;
-import java.util.ArrayList;
-import static org.junit.Assert.assertEquals;
 
+import java.util.ArrayList;
+
+import static org.hamcrest.CoreMatchers.is;
+import static org.junit.Assert.assertThat;
 
 public class ListOfBooksTest {
 
     @Test
     public void ShouldCreateAListOfBooksTest() {
-        ListOfBooks listOfBooks = new ListOfBooks();
-        ArrayList<Book> list = listOfBooks.createListOfBooks();
-        String bookName = list.get(0).getName();
-        String bookAuthor = list.get(0).getAuthor();
-        Integer bookYearPublished = list.get(0).getYearPublished();
+        ListOfBooks list = new ListOfBooks();
+        list.createArrayListOfBooks();
+        String bookName = list.getListOfBooks().get(0).getName();
+        String bookAuthor = list.getListOfBooks().get(0).getAuthor();
+        Integer bookYearPublished = list.getListOfBooks().get(0).getYearPublished();
 
         Book expectedBook = new Book("1984", "George Orwell", 1948);
 
-        assertEquals(expectedBook.getName(), bookName);
-        assertEquals(expectedBook.getAuthor(), bookAuthor);
-        assertEquals(expectedBook.getYearPublished(), bookYearPublished);
+        assertThat((expectedBook.getName()), is(bookName));
+        assertThat((expectedBook.getAuthor()), is(bookAuthor));
+        assertThat((expectedBook.getYearPublished()), is(bookYearPublished));
     }
 
+    @Test
+    public void shouldRemoveBookFromList() {
+        ListOfBooks list = new ListOfBooks();
+        list.createArrayListOfBooks();
 
+        String userInput = "1984";
+        ArrayList<Book> updatedListOfBooks = list.checkoutBook(userInput);
 
-//    @Test
-//    public void shouldRemoveBookFromList(Book book) {
-////        //given
-////        ArrayList<Book> listOfBooks = new ArrayList<Book>();
-////
-////        listOfBooks.add(new Book("1984", "George Orwell", 1948));
-////        listOfBooks.add(new Book("The Brothers Karamazov", "Fiodor Dostoyevski", 1880));
-////        listOfBooks.add(new Book("Catch-22", "Joseph Heller", 1953));
-////
-////        //when
-////        listOfBooks.checkoutBook();
-////        //then
-////        //the li
-//    }
+        assertThat(updatedListOfBooks.size(), is(2));
+    }
+
+    @Test
+    public void shouldNotRemoveBookFromList() {
+        ListOfBooks list = new ListOfBooks();
+        list.createArrayListOfBooks();
+
+        String userInput = "Foo";
+        ArrayList<Book> updatedListOfBooks = list.checkoutBook(userInput);
+
+        assertThat(updatedListOfBooks.size(), is(3));
+    }
+
+    @Test
+    public void shouldAddBookToList() {
+        ListOfBooks list = new ListOfBooks();
+        list.createArrayListOfBooks();
+        String userInput = "1984";
+        list.checkoutBook(userInput);
+
+        list.returnBook(userInput);
+
+        assertThat(list.getListOfBooks().size(), is(3));
+    }
+
+    @Test
+    public void shouldNotAddBookToList() {
+        ListOfBooks list = new ListOfBooks();
+        list.createArrayListOfBooks();
+        String existingBook = "1984";
+        String nonExistingBook = "0000";
+        list.checkoutBook(existingBook);
+
+        list.returnBook(nonExistingBook);
+
+        assertThat(list.getListOfBooks().size(), is (2));
+    }
 }
 
 
