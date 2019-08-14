@@ -2,8 +2,6 @@ package com.twu.biblioteca;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-
 import static org.hamcrest.CoreMatchers.is;
 import static org.junit.Assert.assertThat;
 
@@ -25,51 +23,28 @@ public class ListOfBooksTest {
     }
 
     @Test
-    public void shouldRemoveBookFromList() {
+    public void shouldMakeBookNotAvailable() {
         ListOfBooks list = new ListOfBooks();
         list.createArrayListOfBooks();
 
-        String userInput = "1984";
-        ArrayList<Book> updatedListOfBooks = list.checkoutBook(userInput);
-
-        assertThat(updatedListOfBooks.size(), is(2));
-    }
-
-    @Test
-    public void shouldNotRemoveBookFromList() {
-        ListOfBooks list = new ListOfBooks();
-        list.createArrayListOfBooks();
-
-        String userInput = "Foo";
-        ArrayList<Book> updatedListOfBooks = list.checkoutBook(userInput);
-
-        assertThat(updatedListOfBooks.size(), is(3));
-    }
-
-    @Test
-    public void shouldAddBookToList() {
-        ListOfBooks list = new ListOfBooks();
-        list.createArrayListOfBooks();
-        String userInput = "1984";
+        String userInput = "Catch-22";
         list.checkoutBook(userInput);
 
-        list.returnBook(userInput);
-
-        assertThat(list.getListOfBooks().size(), is(3));
+        assertThat(list.getListOfBooks().get(2).getIsAvailable(), is(false));
     }
 
     @Test
-    public void shouldNotAddBookToList() {
+    public void shouldMakeBookAvailable() {
         ListOfBooks list = new ListOfBooks();
         list.createArrayListOfBooks();
-        String existingBook = "1984";
-        String nonExistingBook = "0000";
-        list.checkoutBook(existingBook);
+        list.getListOfBooks().get(2).setIsAvailable(false);
 
-        list.returnBook(nonExistingBook);
+        String userInput = "Catch-22";
+        list.returnBook(userInput);
 
-        assertThat(list.getListOfBooks().size(), is (2));
+        assertThat(list.getListOfBooks().get(2).getIsAvailable(), is(true));
     }
+
 }
 
 
