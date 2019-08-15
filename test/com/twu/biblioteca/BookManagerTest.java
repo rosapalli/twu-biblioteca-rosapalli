@@ -8,9 +8,10 @@ import static org.junit.Assert.assertThat;
 public class ListOfBooksTest {
 
     @Test
-    public void ShouldCreateAListOfBooksTest() {
-        ListOfBooks list = new ListOfBooks();
+    public void createArrayListOfBooksShouldCreateAListOfBooksTest() {
+        BookManager list = new BookManager();
         list.createArrayListOfBooks();
+
         String bookName = list.getListOfBooks().get(0).getName();
         String bookAuthor = list.getListOfBooks().get(0).getAuthor();
         Integer bookYearPublished = list.getListOfBooks().get(0).getYearPublished();
@@ -23,9 +24,8 @@ public class ListOfBooksTest {
     }
 
     @Test
-    public void shouldMakeBookNotAvailable() {
-        ListOfBooks list = new ListOfBooks();
-        list.createArrayListOfBooks();
+    public void checkoutBookShouldMakeBookNotAvailable() {
+        BookManager list = new BookManager();
 
         String userInput = "Catch-22";
         list.checkoutBook(userInput);
@@ -34,9 +34,9 @@ public class ListOfBooksTest {
     }
 
     @Test
-    public void shouldMakeBookAvailable() {
-        ListOfBooks list = new ListOfBooks();
-        list.createArrayListOfBooks();
+    public void returnBookShouldMakeBookAvailable() {
+        BookManager list = new BookManager();
+
         list.getListOfBooks().get(2).setIsAvailable(false);
 
         String userInput = "Catch-22";
