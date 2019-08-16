@@ -46,7 +46,8 @@ public class BibliotecaTest {
         String password = "abc12345";
 
         UserSession expectedUserSession = new UserSession(username);
-        UserSession testUserSession = biblioteca.loginUser(username, password, userManager);
+        UserSession nullUserSession = new UserSession();
+        UserSession testUserSession = biblioteca.loginUser(username, password, userManager, nullUserSession);
 
         assertThat(testUserSession.getSessionStarted(), is(expectedUserSession.getSessionStarted()));
         assertThat(testUserSession.getUserName(), is(expectedUserSession.getUserName()));
@@ -58,9 +59,9 @@ public class BibliotecaTest {
         UserManager userManager = new UserManager();
         String username = "rosapalli";
         String password = "12345";
+        UserSession nullUserSession = new UserSession();
 
-        UserSession testUserSession = biblioteca.loginUser(username, password, userManager);
-        UserSession expectedUserSession = null;
-        assertThat(testUserSession, is(expectedUserSession));
+        UserSession testUserSession = biblioteca.loginUser(username, password, userManager, nullUserSession);
+        assertThat(testUserSession.getSessionStarted(), is(false));
     }
 }

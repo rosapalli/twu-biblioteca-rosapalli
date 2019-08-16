@@ -48,7 +48,7 @@ public class Biblioteca {
                     String username = terminal.captureUserInput();
                     System.out.println("Please enter your password");
                     String password = terminal.captureUserInput();
-                    userSession = loginUser(username, password, userManager);
+                    userSession = loginUser(username, password, userManager, userSession);
                     break;
                 case "details":
                     String userName = userSession.getUserName();
@@ -108,8 +108,7 @@ public class Biblioteca {
         }
     }
 
-    public UserSession loginUser(String username, String password, UserManager userManager) {
-        UserSession userSession = null;
+    public UserSession loginUser(String username, String password, UserManager userManager, UserSession userSession) {
         Boolean validUser = userManager.userAuthentication(username, password);
             if (validUser) {
                 userSession = userManager.startSession(username);
