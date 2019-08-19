@@ -4,7 +4,7 @@ SELECT member.name FROM member, checkout_item, book  WHERE book.id = checkout_it
 
 How many people have not checked out anything? 37
 
-SELECT id FROM member WHERE member.id NOT IN(SELECT member_id FROM checkout_item);
+SELECT Count(*) FROM member WHERE member.id NOT IN(SELECT member_id FROM checkout_item);
 
 3. What books and movies aren't checked out?
 BOOKS:
