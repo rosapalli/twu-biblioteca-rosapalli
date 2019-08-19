@@ -25,8 +25,8 @@ public class UserManager {
         for (LibraryUser user : listOfUsers) {
             if(user.getUsername().equals(username) && user.getPassword().equals(password)) {
                 match = true;
+                break;
             }
-            break;
         }
         return match;
     }
@@ -40,10 +40,23 @@ public class UserManager {
         LibraryUser currentUser = null;
         for (LibraryUser user: getListOfUsers()) {
             if(user.getUsername().equals(username)) {
-                currentUser = user;
+                return currentUser = user;
             }
         }
         return currentUser;
+    }
+
+    public UserSession loginUser(String username, String password) {
+        UserSession userSession = new UserSession();
+        Boolean validUser = userAuthentication(username, password);
+        if (validUser) {
+            userSession = startSession(username);
+            System.out.println("Session started successfully for " + username);
+            return userSession;
+        } else {
+            System.out.println("Wrong credentials.Please try again.");
+        }
+        return userSession;
     }
 
 

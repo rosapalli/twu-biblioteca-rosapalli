@@ -1,18 +1,32 @@
 package com.twu.biblioteca;
 
-public class Biblioteca {
-    public void go() {
-        TerminalDisplay terminal = new TerminalDisplay();
-        MenuOfOptions menu = new MenuOfOptions();
-        BookManager bookManager = new BookManager();
-        MovieManager movieManager = new MovieManager();
-        UserSession userSession = new UserSession();
-        UserManager userManager = new UserManager();
+import com.sun.codemodel.internal.JMethod;
 
+import java.util.HashMap;
+
+public class Biblioteca {
+
+    TerminalDisplay terminal;
+    BookManager bookManager;
+    MovieManager movieManager;
+    UserManager userManager;
+    UserSession userSession;
+    MenuOfOptions menu;
+
+    public Biblioteca() {
+         this.terminal = new TerminalDisplay();
+         this.bookManager = new BookManager();
+         this.movieManager = new MovieManager();
+         this.userManager = new UserManager();
+         this.userSession = new UserSession();
+         this.menu = new MenuOfOptions();
+    }
+
+    public void go() {
         terminal.displayWelcomeMessage();
         terminal.displayMenuOfOptions(menu);
         String userInput = terminal.captureUserInput();
-        selectOptionFromMainMenu(userInput, terminal, bookManager, movieManager, menu, userSession, userManager);
+        selectOptionFromMainMenu(userInput);
     }
 
     public void exitBiblioteca() {
@@ -20,8 +34,11 @@ public class Biblioteca {
         System.exit(0);
     }
 
-    public void selectOptionFromMainMenu(String userInput, TerminalDisplay terminal, BookManager bookManager, MovieManager movieManager, MenuOfOptions menu, UserSession userSession, UserManager userManager) {
+    public void selectOptionFromMainMenu(String userInput) {
         while (!userInput.contains("exit")) {
+
+            HashMap<String, JMethod> hashMap = new HashMap<>();
+
             switch (userInput) {
                 case "exit":
                     break;
@@ -35,20 +52,20 @@ public class Biblioteca {
                     System.out.println("Please press 1 if you would like to check out a BOOK");
                     System.out.println("Please press 2 if you would like to check out a MOVIE");
                     userInput = terminal.captureUserInput();
-                    selectTypeOfLibraryItemForCheckout(userSession, userInput, terminal, bookManager, movieManager);
+                    selectTypeOfLibraryItemForCheckout(userInput);
                     break;
                 case "return":
                     System.out.println("Please press 1 if you would like return a BOOK");
                     System.out.println("Please press 2 if you would like return a MOVIE");
                     userInput = terminal.captureUserInput();
-                    selectTypeOfLibraryItemToReturn(userInput, terminal, bookManager, movieManager, userSession);
+                    selectTypeOfLibraryItemToReturn(userInput);
                     break;
                 case "login":
                     System.out.println("Please enter your username");
                     String username = terminal.captureUserInput();
                     System.out.println("Please enter your password");
                     String password = terminal.captureUserInput();
-                    userSession = loginUser(username, password, userManager, userSession);
+                    userSession = userManager.loginUser(username, password);
                     break;
                 case "details":
                     String userName = userSession.getUserName();
@@ -66,7 +83,7 @@ public class Biblioteca {
         }
     }
 
-    public void selectTypeOfLibraryItemForCheckout(UserSession userSession, String userInput, TerminalDisplay terminal, BookManager bookManager, MovieManager movieManager) {
+    public void selectTypeOfLibraryItemForCheckout(String userInput) {
         if (userSession.getSessionStarted()) {
             switch (userInput) {
                 case "1":
@@ -87,7 +104,7 @@ public class Biblioteca {
         }
     }
 
-    public void selectTypeOfLibraryItemToReturn(String userInput, TerminalDisplay terminal, BookManager bookManager, MovieManager movieManager, UserSession userSession) {
+    public void selectTypeOfLibraryItemToReturn(String userInput) {
         if(userSession.getSessionStarted()) {
             switch (userInput) {
                 case "1":
@@ -106,16 +123,5 @@ public class Biblioteca {
         } else {
             System.out.println("PLease log in to return a movie or a book");
         }
-    }
-
-    public UserSession loginUser(String username, String password, UserManager userManager, UserSession userSession) {
-        Boolean validUser = userManager.userAuthentication(username, password);
-            if (validUser) {
-                userSession = userManager.startSession(username);
-                System.out.println("Session started successfully for " + username);
-            } else {
-                System.out.println("Wrong credentials.Please try again.");
-            }
-            return userSession;
     }
 }
